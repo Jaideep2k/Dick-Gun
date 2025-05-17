@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spinning PNGs</title>
+  <h1 class="page-title">Dick Gun</h1>
+  <style>
+    body {
+      margin: 0;
+      background: #111;
+      overflow: hidden;
+    }
+    
+    .page-title {
+    position: absolute;
+    top: 5%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 48px;
+    font-family: sans-serif;
+    z-index: 5;
+    text-align: center;
+    pointer-events: none; /* Allows clicks to go through the header */
+  }
+
+
+    .png-container {
+      position: absolute;
+      width: 100%;
+      height: 75%;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      align-items: center;
+      pointer-events: none;
+    }
+
+    .spin {
+      width: 350px;
+      height: auto;
+      animation: spin 4s linear infinite;
+    }
+
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    #shootBtn {
+      position: absolute;
+      bottom: 250px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 15px 30px;
+      font-size: 36px;
+      background-color: crimson;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      z-index: 10;
+    }
+
+    #shootBtn:hover {
+      background-color: darkred;
+    }
+  </style>
+</head>
+<body>
+  <div class="png-container">
+    <img src="dick2.png" class="spin" alt="Spin 1">
+    <img src="dick2.png" class="spin" alt="Spin 2">
+    <img src="dick2.png" class="spin" alt="Spin 3">
+    <img src="dick2.png" class="spin" alt="Spin 4">
+  </div>
+
+  <button id="shootBtn">Shoot</button>
+
+  <script>
+  document.getElementById("shootBtn").addEventListener("click", function () {
+  const esp32IP = "http://172.20.10.2:80"; // Replace with your actual ESP32 IP
+
+  fetch(`${esp32IP}/shoot?value=1`, {
+    method: "GET"
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    return response.text();
+  })
+  .then(data => {
+    console.log("ESP32 response:", data);
+  })
+  .catch(error => {
+    console.error("Error communicating with ESP32:", error);
+  });
+});
+
+
+  </script>
+</body>
+</html>
